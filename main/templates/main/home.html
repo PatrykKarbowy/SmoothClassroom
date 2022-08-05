@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 {% block title %}SmoothClass{% endblock %}
 {% block content %}
+{{classrooms}}
 {% for post in posts %}
 <div class="card mt-2">
     <div class="card-header"><strong>@{{ post.author.username }}</strong></div>
