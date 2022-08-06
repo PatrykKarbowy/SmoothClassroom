@@ -9,4 +9,5 @@ urlpatterns = [
     path('create_task', views.create_task, name='create_task'),
     path('create_classroom', views.create_classroom, name='create_classroom'),
     path('classroom/<str:id>', views.classroom, name='classroom'),
+    path('send_message', views.send_message, name='send_message'),
 ]
