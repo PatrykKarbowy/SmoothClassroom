@@ -1,10 +1,10 @@
 from re import L
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, PostForm, TaskForm
+from .forms import RegistrationForm, PostForm, TaskForm, ClassroomForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
-from .models import Post, Task
+from .models import Post, Task, Classroom
 from django.contrib import messages
 
 # Create your views here.
@@ -30,8 +30,9 @@ def home(request):
                     group = Group.objects.get(name='mod')
                     group.user_set.remove(user)
                 except:
-                    pass      
-    return render(request, 'main/home.html', {"posts": posts})
+                    pass     
+    classrooms = Classroom.objects.all()
+    return render(request, 'main/home.html', {"posts": posts, "classrooms":classrooms,})
 
 
 @permission_required("main.add_post", login_url='/login', raise_exception=True)
@@ -83,3 +84,21 @@ def create_task(request):
                 return redirect('/create_task')
     form = TaskForm()
     return render(request, 'main/create_task.html', {'form': form, 'tasks': tasks})
+
+
+@login_required(login_url="/login")
+def create_classroom(request):
+    if request.method == "POST":
+        form = ClassroomForm(request.POST)
+        if form.is_valid():
+            classroom = form.save(commit=False)
+            classroom.save()
+            return redirect("/home")
+    else:
+        form = ClassroomForm()
+    return render(request, 'main/create_classroom.html', {"form": form})
+
+def classroom(request, id):
+    classroom = Classroom.objects.get(id = id)
+    
+    return render(request, 'main/classroom.html', {"classroom": classroom})
