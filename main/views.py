@@ -30,8 +30,9 @@ def home(request):
                     group = Group.objects.get(name='mod')
                     group.user_set.remove(user)
                 except:
-                    pass      
-    return render(request, 'main/home.html', {"posts": posts,})
+                    pass     
+    classrooms = Classroom.objects.all()
+    return render(request, 'main/home.html', {"posts": posts, "classrooms":classrooms,})
 
 
 @permission_required("main.add_post", login_url='/login', raise_exception=True)
@@ -98,4 +99,6 @@ def create_classroom(request):
     return render(request, 'main/create_classroom.html', {"form": form})
 
 def classroom(request, id):
-    pass
+    classroom = Classroom.objects.get(id = id)
+    
+    return render(request, 'main/classroom.html', {"classroom": classroom})

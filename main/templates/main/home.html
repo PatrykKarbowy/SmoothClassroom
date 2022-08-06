@@ -1,7 +1,27 @@
 {% extends 'main/base.html' %}
-{% block title %}SmoothClass{% endblock %}
+{% block title %}SmoothClassroom - Private lessons dashboard{% endblock %}
 {% block content %}
-{{classrooms}}
+<div class="card">
+    <div class="card-header">
+      <strong>Your personal courses</strong>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tbody>
+              <tr>
+                {% for classroom in classrooms %}
+                    {% for student in classroom.students.all %}
+                        {% if user.username == student.username %}
+                            <td><scope><a href="{% url 'classroom' classroom.id %}">{{classroom}}</a> </scope></td>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+              </tr>
+            </tbody>
+          </table>
+    </div>
+    
+  </div>
 {% for post in posts %}
 <div class="card mt-2">
     <div class="card-header"><strong>@{{ post.author.username }}</strong></div>

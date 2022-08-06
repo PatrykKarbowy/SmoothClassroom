@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% block title %}SmoothClassroom - Private lessons dashboard{% endblock %}
+{% block content %}
+<div class="container px-4 text-center">
+    <div class="row">
+        <div class="col">
+         <div class="fs-1 p-3" >{{classroom.name}}</div>
+        </div>
+      </div>
+    <div class="row gx-5">
+      <div class="col-3">
+       <div class="p-3 border bg-light">STUDENTS</div>
+       {% for student in classroom.students.all %}
+          <div><strong>{{student.username}}</strong></div>
+       {% endfor %}
+      </div>
+      <div class="col">
+        <div class="p-3 border bg-light">LIVE-CHAT</div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
