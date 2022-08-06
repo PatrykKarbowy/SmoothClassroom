@@ -28,3 +28,9 @@ class Classroom(models.Model):
         
     def __str__(self):
         return self.name
+    
+class Message(models.Model):
+    text = models.CharField(max_length = 10000)
+    date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)

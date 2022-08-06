@@ -4,7 +4,7 @@ from .forms import RegistrationForm, PostForm, TaskForm, ClassroomForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
-from .models import Post, Task, Classroom
+from .models import Post, Task, Classroom, Message
 from django.contrib import messages
 
 # Create your views here.
@@ -100,5 +100,4 @@ def create_classroom(request):
 
 def classroom(request, id):
     classroom = Classroom.objects.get(id = id)
-    
     return render(request, 'main/classroom.html', {"classroom": classroom})
