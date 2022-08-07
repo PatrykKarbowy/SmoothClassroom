@@ -10,4 +10,5 @@ urlpatterns = [
     path('create_classroom', views.create_classroom, name='create_classroom'),
     path('classroom/<str:id>', views.classroom, name='classroom'),
     path('send_message', views.send_message, name='send_message'),
+    path('classroom/get_messages/<str:id>', views.get_messages, name='get_messages'),
 ]

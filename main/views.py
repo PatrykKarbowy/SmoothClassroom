@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
 from .models import Post, Task, Classroom, Message
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -106,12 +106,22 @@ def classroom(request, id):
 
 def send_message(request):
     message = request.POST['message']
-    studentname = request.POST['studentname']
+    student = request.user
     classroom_id = request.POST['classroom_id']
-    
-    print(message)
-    
-    new_message = Message.objects.create(text=message, author=studentname, classroom=classroom_id)
+    classroom = Classroom.objects.get(id = classroom_id)
+    new_message = Message.objects.create(text=message, author=student, classroom=classroom)
     new_message.save()
     return HttpResponse("Done")
+
+def get_messages(request, id):
+    classroom = Classroom.objects.get(id = id)
+    messages = Message.objects.filter(classroom = classroom)
+    final_messages = list(messages.values())
+    i = 0
+    for message in messages:
+        author = message.author.username
+        final_messages[i]["author_name"] = author
+        i += 1
+    
+    return JsonResponse({"messages":final_messages})
     
