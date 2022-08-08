@@ -9,7 +9,6 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
-@login_required(login_url='/login')
 def home(request):
     posts = Post.objects.all()
     if request.method == 'POST':
@@ -37,7 +36,6 @@ def home(request):
 
 
 @permission_required("main.add_post", login_url='/login', raise_exception=True)
-@login_required(login_url='/login')
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -63,7 +61,6 @@ def sign_up(request):
     return render(request, 'registration/sign_up.html', {"form": form})
 
 
-@login_required(login_url = "/login")
 def create_task(request):
     tasks = Task.objects.order_by("id").all()
     if request.method == 'POST':
@@ -87,7 +84,6 @@ def create_task(request):
     return render(request, 'main/create_task.html', {'form': form, 'tasks': tasks})
 
 
-@login_required(login_url="/login")
 def create_classroom(request):
     if request.method == "POST":
         form = ClassroomForm(request.POST)

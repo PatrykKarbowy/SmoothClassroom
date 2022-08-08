@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'website.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -132,6 +133,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_EXEMPT_URLS = (
+    r'^login/$',
+    r'^logout/$',
+    r'^sign_up$'
+)
+
+LOGIN_URL = '/login'
 
 LOGIN_REDIRECT_URL = "/home"
 LOGOUT_REDIRECT_URL = "/login"
