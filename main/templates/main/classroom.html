@@ -1,6 +1,28 @@
 {% extends 'main/base.html' %}
-{% block title %}SmoothClassroom - Private lessons dashboard{% endblock %}
+{% block title %} {{classroom.name}} {% endblock %}
 {% block content %}
+<script>
+  $(document).ready(function(){
+  
+  setInterval(function(){
+      $.ajax({
+          type: 'GET',
+          url : "get_messages/{{classroom.id}}",
+          success: function(response){
+              $("#display_message").empty();
+              for (var key in response.messages)
+              {
+                  var temp="<div class=' border bg-light text-start'><b>"+
+                    response.messages[key].author_name+"</b><p>"+response.messages[key].text+
+                      "</p><span class='text-muted'>"+response.messages[key].date+
+                        "</span></div>";
+                  $("#display_message").append(temp);
+              }
+          },
+      });
+  },500);
+  })
+  </script>
 <div class="container px-4 text-center">
     <div class="row">
         <div class="col">
@@ -13,9 +35,26 @@
        {% for student in classroom.students.all %}
           <div><strong>{{student.username}}</strong></div>
        {% endfor %}
-      </div>
+      </div>   
       <div class="col">
         <div class="p-3 border bg-light">LIVE-CHAT</div>
+        <div class="p-3 border bg-light" id="display_message">
+
+
+
+        </div>
+        <div class="p-3 border bg-light">
+
+          <form id="post-form">
+            {% csrf_token %}
+            <input type="hidden" name="classroom_id" id="classroom_id" value="{{classroom.id}}"/>
+            <input type="text" class="form-control" placeholder="Wiadomość..." name="message" id="message"/>
+            <br>
+            <input type="submit" class="btn btn-success" value = "Send message">
+
+          </form>
+
+        </div>
       </div>
     </div>
   </div>

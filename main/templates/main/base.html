@@ -9,6 +9,7 @@
     integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" 
     crossorigin="anonymous">
     <title>{% block title %}Title{% endblock%}</title>
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
 </head>
 <body>
     <nav class = "navbar navbar-expand-lg navbar-dark bg-dark">
@@ -57,4 +58,23 @@
     integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" 
     crossorigin="anonymous"></script>  
 </body>
+<script type="text/javascript">
+    $(document).on('submit','#post-form',function(e){
+      e.preventDefault();
+  
+      $.ajax({
+        type:'POST',
+        url:'/send_message',
+        data:{
+            classroom_id:$('#classroom_id').val(),
+            message:$('#message').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data){
+        }
+      });
+      document.getElementById('message').value = ''
+    });
+  </script>
+  
 </html>

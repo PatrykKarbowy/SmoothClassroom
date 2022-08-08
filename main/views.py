@@ -4,11 +4,11 @@ from .forms import RegistrationForm, PostForm, TaskForm, ClassroomForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
-from .models import Post, Task, Classroom
+from .models import Post, Task, Classroom, Message
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
-@login_required(login_url='/login')
 def home(request):
     posts = Post.objects.all()
     if request.method == 'POST':
@@ -36,7 +36,6 @@ def home(request):
 
 
 @permission_required("main.add_post", login_url='/login', raise_exception=True)
-@login_required(login_url='/login')
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -62,7 +61,6 @@ def sign_up(request):
     return render(request, 'registration/sign_up.html', {"form": form})
 
 
-@login_required(login_url = "/login")
 def create_task(request):
     tasks = Task.objects.order_by("id").all()
     if request.method == 'POST':
@@ -86,7 +84,6 @@ def create_task(request):
     return render(request, 'main/create_task.html', {'form': form, 'tasks': tasks})
 
 
-@login_required(login_url="/login")
 def create_classroom(request):
     if request.method == "POST":
         form = ClassroomForm(request.POST)
@@ -101,4 +98,26 @@ def create_classroom(request):
 def classroom(request, id):
     classroom = Classroom.objects.get(id = id)
     
-    return render(request, 'main/classroom.html', {"classroom": classroom})
+    return render(request, 'main/classroom.html', {"classroom": classroom,})
+
+def send_message(request):
+    message = request.POST['message']
+    student = request.user
+    classroom_id = request.POST['classroom_id']
+    classroom = Classroom.objects.get(id = classroom_id)
+    new_message = Message.objects.create(text=message, author=student, classroom=classroom)
+    new_message.save()
+    return HttpResponse("Done")
+
+def get_messages(request, id):
+    classroom = Classroom.objects.get(id = id)
+    messages = Message.objects.filter(classroom = classroom)
+    final_messages = list(messages.values())
+    i = 0
+    for message in messages:
+        author = message.author.username
+        final_messages[i]["author_name"] = author
+        i += 1
+    
+    return JsonResponse({"messages":final_messages})
+    
