@@ -1,11 +1,12 @@
 from re import L
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .forms import RegistrationForm, PostForm, TaskForm, ClassroomForm
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import login
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.forms import PasswordChangeForm
 from .models import Post, Task, Classroom, Message
-from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
@@ -43,7 +44,7 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect("/home")
+            return reverse('home')
     else:
         form = PostForm()
     return render(request, 'main/create_post.html', {'form': form})
@@ -54,11 +55,25 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/home')
+            return reverse('home')
     else:
         form = RegistrationForm()
         
     return render(request, 'registration/sign_up.html', {"form": form})
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data = request.POST, user = request.user)
+        
+        if form.is_valid():
+            form.save()
+            return reverse('home')
+        else:
+            return reverse('change_password')
+    else:
+        form = PasswordChangeForm(user = request.user)
+    return render(request, 'registration/change_password.html', {"form": form})
+        
 
 
 def create_task(request):
@@ -79,7 +94,7 @@ def create_task(request):
                 task = form.save(commit=False)
                 task.author = request.user
                 task.save()
-                return redirect('/create_task')
+                return reverse('create_task')
     form = TaskForm()
     return render(request, 'main/create_task.html', {'form': form, 'tasks': tasks})
 
@@ -90,7 +105,7 @@ def create_classroom(request):
         if form.is_valid():
             classroom = form.save(commit=False)
             classroom.save()
-            return redirect("/home")
+            return reverse('home')
     else:
         form = ClassroomForm()
     return render(request, 'main/create_classroom.html', {"form": form})
