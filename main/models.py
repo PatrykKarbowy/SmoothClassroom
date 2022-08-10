@@ -10,7 +10,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     
     def __str__(self):
-        return self.title + '\n' + self.description
+        return self.title
     
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -25,9 +25,9 @@ class Task(models.Model):
 class Classroom(models.Model):
     students = models.ManyToManyField(User)
     name = models.CharField(max_length = 200)   
-        
+    
     def __str__(self):
-        return self.name
+        return self.name    
     
 class Message(models.Model):
     text = models.CharField(max_length = 10000)
