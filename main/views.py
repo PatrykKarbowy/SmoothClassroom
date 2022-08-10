@@ -1,6 +1,5 @@
 from re import L
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from .forms import RegistrationForm, PostForm, TaskForm, ClassroomForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import permission_required
@@ -44,7 +43,7 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return reverse('home')
+            return redirect('home')
     else:
         form = PostForm()
     return render(request, 'main/create_post.html', {'form': form})
@@ -55,7 +54,7 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return reverse('home')
+            return redirect('home')
     else:
         form = RegistrationForm()
         
@@ -67,9 +66,9 @@ def change_password(request):
         
         if form.is_valid():
             form.save()
-            return reverse('home')
+            return redirect('home')
         else:
-            return reverse('change_password')
+            return redirect('change_password')
     else:
         form = PasswordChangeForm(user = request.user)
     return render(request, 'registration/change_password.html', {"form": form})
@@ -94,7 +93,7 @@ def create_task(request):
                 task = form.save(commit=False)
                 task.author = request.user
                 task.save()
-                return reverse('create_task')
+                return redirect('create_task')
     form = TaskForm()
     return render(request, 'main/create_task.html', {'form': form, 'tasks': tasks})
 
@@ -105,7 +104,7 @@ def create_classroom(request):
         if form.is_valid():
             classroom = form.save(commit=False)
             classroom.save()
-            return reverse('home')
+            return redirect('home')
     else:
         form = ClassroomForm()
     return render(request, 'main/create_classroom.html', {"form": form})
