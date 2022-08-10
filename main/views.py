@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import PasswordChangeForm
 from .models import Post, Task, Classroom, Message
 from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
@@ -54,6 +55,7 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, 'Your account has been created')
             return redirect('home')
     else:
         form = RegistrationForm()
@@ -66,14 +68,15 @@ def change_password(request):
         
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your password has been changed')
             return redirect('home')
         else:
+            messages.error(request, 'Invalid password')
             return redirect('change_password')
     else:
         form = PasswordChangeForm(user = request.user)
     return render(request, 'registration/change_password.html', {"form": form})
         
-
 
 def create_task(request):
     tasks = Task.objects.order_by("id").all()
@@ -104,6 +107,7 @@ def create_classroom(request):
         if form.is_valid():
             classroom = form.save(commit=False)
             classroom.save()
+            messages.success(request, 'Classroom created successfully')
             return redirect('home')
     else:
         form = ClassroomForm()
@@ -111,7 +115,7 @@ def create_classroom(request):
 
 def classroom(request, id):
     classroom = Classroom.objects.get(id = id)
-    
+        
     return render(request, 'main/classroom.html', {"classroom": classroom,})
 
 def send_message(request):

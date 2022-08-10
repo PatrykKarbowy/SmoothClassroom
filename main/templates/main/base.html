@@ -50,6 +50,9 @@
             </div>
         </div>
     </nav>
+    <div>
+        {% include 'main/messages.html' %}
+    </div>
     <div class="container">
         {% block content %}
         {% endblock %}
@@ -76,5 +79,13 @@
       document.getElementById('message').value = ''
     });
   </script>
+
+<script type="text/javascript">
+    setTimeout(function(){
+        if ($('#msg').length > 0) {
+            $('#msg').remove();
+        }
+    }, 3000)
+</script>
   
 </html>
