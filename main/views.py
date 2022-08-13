@@ -13,14 +13,14 @@ from django.contrib import messages
 def home(request):
     posts = Post.objects.all()
     if request.method == 'POST':
-        post_id = request.POST.get('post-id')
-        user_id = request.POST.get('user-id')
-        if post_id:
-            post = Post.objects.filter(id=post_id).first()
+        post_delete = request.POST.get('post_delete')
+        ban_user = request.POST.get('ban_user')
+        if post_delete:
+            post = Post.objects.filter(id=post_delete).first()
             if post and (post.author == request.user or request.user.has_perm("main.delete_post")):
                 post.delete()
-        elif user_id:
-            user = User.objects.filter(id=user_id).first()
+        elif ban_user:
+            user = User.objects.filter(id=ban_user).first()
             if user and request.user.is_staff:
                 try:
                     group = Group.objects.get(name='default')
@@ -49,6 +49,18 @@ def create_post(request):
         form = PostForm()
     return render(request, 'main/create_post.html', {'form': form})
 
+def update_post(request, id):
+    post_detail = Post.objects.get(id=id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post_detail)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = PostForm(instance=post_detail)
+    return render(request, 'main/create_post.html', {'form': form})
+        
+
 def sign_up(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -60,23 +72,7 @@ def sign_up(request):
     else:
         form = RegistrationForm()
         
-    return render(request, 'registration/sign_up.html', {"form": form})
-
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(data = request.POST, user = request.user)
-        
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your password has been changed')
-            return redirect('home')
-        else:
-            messages.error(request, 'Invalid password')
-            return redirect('change_password')
-    else:
-        form = PasswordChangeForm(user = request.user)
-    return render(request, 'registration/change_password.html', {"form": form})
-        
+    return render(request, 'registration/sign_up.html', {"form": form})    
 
 def create_task(request):
     tasks = Task.objects.order_by("id").all()

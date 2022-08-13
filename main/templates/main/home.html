@@ -31,16 +31,19 @@
             <p>{{post.description}}</p>
         </div>
         <div>
-            {% if user == post.author or perms.main.delete_post %}
+            {% if user == post.author or perms.main.delete_post%}
                 <form method = "POST">
                     {% csrf_token %}
-                    <button type ="submit" class="btn btn-danger" name= "post-id" value="{{post.id}}">Delete</button>
+                    <button type ="submit" class="btn btn-danger" name= "post_delete" value="{{post.id}}">Delete</button>
                 </form>
+            {% endif %}
+            {% if user == post.author %}
+            <a class = "btn btn-info" href="{% url 'update_post' post.id %}">Edit post</a>
             {% endif %}
             {% if user.is_staff %}
                 <form method = "POST">
                     {% csrf_token %}
-                    <button type ="submit" class="btn btn-warning" name= "user-id" value="{{post.author.id}}">Ban user</button>
+                    <button type ="submit" class="btn btn-warning" name= "ban_user" value="{{post.author.id}}">Ban user</button>
                 </form>
             {% endif %}
         </div>
