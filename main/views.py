@@ -1,13 +1,14 @@
-from re import L
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm, PostForm, TaskForm, ClassroomForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.forms import PasswordChangeForm
 from .models import Post, Task, Classroom, Message
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
+from django.views.generic.list import ListView
+from django.db.models import Q
+
 
 # Create your views here.
 def home(request):
@@ -101,8 +102,7 @@ def create_classroom(request):
     if request.method == "POST":
         form = ClassroomForm(request.POST)
         if form.is_valid():
-            classroom = form.save(commit=False)
-            classroom.save()
+            form.save()
             messages.success(request, 'Classroom created successfully')
             return redirect('home')
     else:
@@ -134,4 +134,15 @@ def get_messages(request, id):
         i += 1
     
     return JsonResponse({"messages":final_messages})
+
+class SearchResultsListView(ListView):
+    model = Post
+    context_object_name = 'post_list'
+    template_name = 'main/search_post_results.html'
+    
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Post.objects.filter(
+            Q(title__icontains = query) | Q(author__username__icontains = query) | Q(description__icontains = query)
+        )
     

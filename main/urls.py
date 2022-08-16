@@ -1,11 +1,10 @@
-from django.urls import path, reverse_lazy
+from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('home', views.home, name='home'),
-    
     
     path('sign_up', views.sign_up, name='sign_up'),
     path('password_change/', auth_views.PasswordChangeView.as_view(
@@ -29,6 +28,7 @@ urlpatterns = [
     
     path('create_post', views.create_post, name='create_post'),
     path('update_post/<str:id>', views.update_post, name='update_post'),
+    path('search_post/', views.SearchResultsListView.as_view(), name='search_post_results'),
     path('create_task', views.create_task, name='create_task'),
     path('create_classroom', views.create_classroom, name='create_classroom'),
     path('classroom/<str:id>', views.classroom, name='classroom'),
