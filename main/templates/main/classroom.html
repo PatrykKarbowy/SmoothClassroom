@@ -12,7 +12,7 @@
               $("#display_message").empty();
               for (var key in response.messages)
               {
-                  var temp="<div class=' border bg-light text-start'><b>"+
+                  var temp="<div class=' border bg-light text-start text-wrap'><b>"+
                     response.messages[key].author_name+"</b><p>"+response.messages[key].text+
                       "</p><span class='text-muted'>"+response.messages[key].date+
                         "</span></div>";

@@ -6,6 +6,7 @@
 {% csrf_token %}{{form|crispy}}
 <button type="submit" class="btn btn-success">Create Task</button>
 </form>
+<div class="table-responsive">
 <table class="table table-hover">
     <thead>
       <tr>
@@ -19,9 +20,9 @@
         {% if user == task.author %}
             <tr>
               {% if task.finished %}
-              <td class="text-decoration-line-through">{{task.title}}</td>
+              <td class="text-decoration-line-through text-break"> {{task.title}}</td>
               {% else %}
-              <td>{{task.title}}</td>
+              <td class="text-break">{{task.title}}</td>
               {% endif %}
               <td>
                 <form method="post">
@@ -40,4 +41,5 @@
         {% endfor %}
     </tbody>
   </table>
+  </div>
 {% endblock %}
