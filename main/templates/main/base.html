@@ -25,6 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'create_task' %}">Task list</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'calendar' %}">Lessons Calendar</a>
+                    </li>
                     {% if user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'create_classroom' %}">Create Classrooms</a>
