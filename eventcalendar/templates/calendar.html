@@ -29,7 +29,7 @@ caption {
 }
 
 #calendar a {
-	color: #8e352e;
+	color: #fff;
 	text-decoration: none;
 }
 
@@ -40,7 +40,7 @@ caption {
 }
 
 #calendar .weekdays {
-	background: #8e352e;  
+	background: #444152;  
     text-align: center;
 	text-transform: uppercase;
 	line-height: 15px;
@@ -137,5 +137,11 @@ caption {
 </style>
 
 {{ calendar }}
+<div class="d-flex justify-content-between">
+	<a class="btn btn-outline-secondary" href="{% url 'calendar'%}?{{prev_month}}">Previous Month</a>
+	<a class="btn btn-success" href="{% url 'add_lesson' %}">Add new lesson</a>
+	<a class="btn btn-outline-secondary" href="{% url 'calendar'%}?{{next_month}}">Next Month</a>
+</div>
+
 
 {% endblock %}

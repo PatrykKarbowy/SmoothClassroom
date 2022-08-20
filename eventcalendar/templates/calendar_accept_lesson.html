@@ -1,0 +1,9 @@
+{% extends 'main/base.html' %}
+{% block title %}AAccept lesson{% endblock %}
+{% block content %}
+<h1 class="d-flex justify-content-center">Lesson succesfully accepted!</h1>
+<form method="post">
+{% csrf_token %}
+<button type="submit" class="btn btn-success">Go back to calendar</button>
+</form>
+{% endblock %}
