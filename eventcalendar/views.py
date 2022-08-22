@@ -2,7 +2,7 @@ from django.shortcuts import render
 from datetime import datetime, timedelta
 from django.http import HttpResponse
 from .models import Lesson
-from .forms import LessonForm
+from .forms import AdminLessonForm, LessonForm
 from django.views import generic
 from .utils import Calendar
 from django.utils.safestring import mark_safe
@@ -44,18 +44,37 @@ def next_month(d):
 class LessonCreateView(generic.CreateView):
     model = Lesson
     template_name = 'calendar_add_lesson.html'
-    form_class = LessonForm
     success_url = '/calendar'
     
+    def get_form_class(self):
+        if self.request.user.is_staff:
+            form_class=AdminLessonForm
+        else:
+            form_class=LessonForm
+        return form_class
+    
     def form_valid(self, form):
-        form.instance.student = self.request.user
+        if self.get_form_class() == LessonForm:
+            form.instance.student = self.request.user
         return super().form_valid(form)
     
 class LessonUpdateView(generic.UpdateView):
     model = Lesson
     template_name = 'calendar_add_lesson.html'
-    form_class = LessonForm
     success_url = '/calendar'
+    
+    def get_form_class(self):
+        if self.request.user.is_staff:
+            form_class=AdminLessonForm
+        else:
+            form_class=LessonForm
+        return form_class
+    
+    def form_valid(self, form):
+        if self.get_form_class() == LessonForm:
+            form.instance.student = self.request.user
+        form.instance.accepted = False
+        return super().form_valid(form)
 
 class LessonDeleteView(generic.DeleteView):
     model = Lesson
