@@ -29,4 +29,3 @@ class ClassroomForm(forms.ModelForm):
         queryset=User.objects.all(),
         widget = forms.CheckboxSelectMultiple
     )
-        

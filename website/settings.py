@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+5n-r3ji(f7=7%y#7of03p$fw136agjjdls63v+o=j_c7+^=t7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['smooth-class.herokuapp.com', '127.0.0.1']
 
@@ -144,6 +144,7 @@ LOGIN_EXEMPT_URLS = (
     'logout',
     'sign_up',
     'password_reset',
+    'reset'
 )
 
 LOGIN_URL = '/login'
@@ -154,11 +155,13 @@ LOGOUT_REDIRECT_URL = "/login"
 # SMTP CONFIGURATION
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+DEFAULT_FROM_EMAIL = 'naukiscisle.kontakt@gmail.com'
+EMAIL_FROM = 'naukiscisle.kontakt@gmail.com'
 
 # MESSAGES CONSTANTS
 

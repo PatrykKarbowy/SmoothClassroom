@@ -24,7 +24,7 @@ class Task(models.Model):
  
 class Classroom(models.Model):
     students = models.ManyToManyField(User)
-    name = models.CharField(max_length = 200)   
+    name = models.CharField(max_length = 200)  
     
     def __str__(self):
         return self.name    
