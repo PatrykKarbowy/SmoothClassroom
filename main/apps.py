@@ -14,7 +14,7 @@ class MainConfig(AppConfig):
         def add_to_default_group(sender, **kwargs):
             user = kwargs['instance']
             if kwargs['created']:
-                group, ok = Group.objects.get_or_create(name='default')
+                group, ok = Group.objects.get_or_create(name='student')
                 group.user_set.add(user)
         
         post_save.connect(add_to_default_group, sender=settings.AUTH_USER_MODEL)
